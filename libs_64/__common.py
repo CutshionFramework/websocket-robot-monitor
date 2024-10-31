@@ -8,10 +8,10 @@ import platform
 __system = platform.system()
 
 if __system == "Windows":
-    print("当前系统为Windows")
+    #print("当前系统为Windows")
     def init_env():
         base_dir = os.path.abspath(os.path.dirname(__file__))
-        print('base dir', base_dir)
+        #print('base dir', base_dir)
 
         # 指定 Windows 动态库查找路径
         syspath = os.path.join(base_dir)
@@ -23,9 +23,9 @@ if __system == "Windows":
         path_env = os.environ.get('PATH')
         path_env = env_path + ';' + path_env
         os.environ['PATH'] = path_env
-        print('env: {}'.format(os.environ['PATH']))
+        #print('env: {}'.format(os.environ['PATH']))
 elif __system == "Linux":
-    print("当前系统为Linux")
+    #print("当前系统为Linux")
     def init_env():
         base_dir = os.path.abspath(os.path.dirname(__file__))
 

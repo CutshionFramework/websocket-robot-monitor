@@ -11,31 +11,22 @@ socketio = SocketIO(app, async_mode='eventlet', cors_allowed_origins="*", logger
 def format_robot_status(status):
     all_IO = {
         "CABINET": {
-            "dout": [],  # cabinet digital output
-            "din": [],   # cabinet digital input
-            "aout": [],  # cabinet analog output
-            "ain": []    # cabinet analog input
+            "dout": [status[1][10]],  # cabinet digital output
+            "din": [status[1][11]],   # cabinet digital input
+            "aout": [status[1][12]],  # cabinet analog output
+            "ain": [status[1][13]]    # cabinet analog input
         },
         "TOOL": {
-            "tio_dout": [],  # tool digital output
-            "tio_din": [],   # tool digital input
-            "tio_ain": []    # tool analog input
+            "tio_dout": [status[1][14]],  # tool digital output
+            "tio_din": [status[1][15]],   # tool digital input
+            "tio_ain": [status[1][16]]    # tool analog input
         },
         "EXTEND": {
-            "extio": [],  # external extension IO
+            "extio": [status[1][17]],  # external extension IO
             "out": [],
             "in": [], 
         }
     }
-
-    all_IO["CABINET"]["dout"].append(status[1][10])
-    all_IO["CABINET"]["din"].append(status[1][11])
-    all_IO["CABINET"]["aout"].append(status[1][12])
-    all_IO["CABINET"]["ain"].append(status[1][13])
-    all_IO["TOOL"]["tio_dout"].append(status[1][14])
-    all_IO["TOOL"]["tio_din"].append(status[1][15])
-    all_IO["TOOL"]["tio_ain"].append(status[1][16])
-    all_IO["EXTEND"]["extio"].append(status[1][17])
 
     return all_IO
 
@@ -53,7 +44,7 @@ def fetch_robot_status(rc):
                 print("No status fetched from the robot.")
         except Exception as e:
             print(f"Error fetching robot status: {e}")
-        eventlet.sleep(1)
+        eventlet.sleep(0.1)
 
 @app.route('/')
 def index():
@@ -69,7 +60,7 @@ def handle_disconnect():
 
 def main():
     import jkrc
-    rc = jkrc.RC("192.168.0.140")
+    rc = jkrc.RC("192.168.0.127")
     rc.login()
     eventlet.spawn(fetch_robot_status, rc)
     socketio.run(app, host='0.0.0.0', port=5000)
