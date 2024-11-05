@@ -1,4 +1,4 @@
-# -*- coding: utf-8
+# -*- coding: utf-8 -*-
 import os
 import sys
 import ctypes
@@ -30,14 +30,20 @@ elif __system == "Linux":
         base_dir = os.path.abspath(os.path.dirname(__file__))
 
         # 加载 Linux 动态库 libjakaAPI.so
-        env_path = os.path.join(base_dir, r'out/shared/libjakaAPI.so')
+        env_path = os.path.join(base_dir, 'libjakaAPI.so')
         ctypes.CDLL(env_path)
 
-        # 加载 Linux Python jkzuc模块查找路径
-        syspath = os.path.join(base_dir, r'out/python3')
+        # 加载 Linux Python jkrc 模块查找路径
+        syspath = os.path.join(base_dir)
         sys.path.append(syspath)
-        # print('SYS PATH: {}\n {}'.format(sys.path, syspath))
-        # print('LD_LIBRARY_PATH: {}'.format(os.environ['LD_LIBRARY_PATH']))
+
+        # 设置 LD_LIBRARY_PATH 环境变量
+        ld_library_path = os.environ.get('LD_LIBRARY_PATH', '')
+        new_ld_library_path = f"{base_dir}:{ld_library_path}"
+        os.environ['LD_LIBRARY_PATH'] = new_ld_library_path
+
+        #print('SYS PATH: {}\n {}'.format(sys.path, syspath))
+        #print('LD_LIBRARY_PATH: {}'.format(os.environ.get('LD_LIBRARY_PATH')))
 else:
     print("未知系统")
 
